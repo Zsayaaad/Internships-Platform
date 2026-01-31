@@ -14,7 +14,7 @@ export const companiesRelations = relations(companies, ({ many }) => ({
 /* INTERNSHIPS */
 export const internshipsRelations = relations(internships, ({ many, one }) => ({
   company: one(companies, {
-    fields: [internships.companyId],
+    fields: [internships.companyId], // FK
     references: [companies.id],
   }),
   applications: many(applications),

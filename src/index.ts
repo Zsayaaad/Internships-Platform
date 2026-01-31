@@ -1,15 +1,12 @@
 import express from "express";
 import cors from "cors";
 import internshipsRouter from "./routes/internships";
+import { toNodeHandler } from "better-auth/node";
+import { auth } from "./lib/auth";
 
 const PORT = 8000;
 const app = express();
 
-// app.use(
-//   cors({
-//     origin: process.env.FRONTEND_URL,
-//   }),
-// );
 const frontendOrigin = process.env.FRONTEND_URL;
 if (!frontendOrigin) {
   throw new Error("FRONTEND_URL must be set to enable CORS");
@@ -19,6 +16,8 @@ app.use(
     origin: frontendOrigin,
   }),
 );
+
+app.all("/api/auth/*splat", toNodeHandler(auth));
 
 app.use(express.json());
 app.use("/api/internships", internshipsRouter);

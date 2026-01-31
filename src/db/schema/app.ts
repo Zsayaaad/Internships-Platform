@@ -10,6 +10,7 @@ import {
   smallint,
 } from "drizzle-orm/pg-core";
 import { InferSelectModel, InferInsertModel } from "drizzle-orm";
+import { user } from "./auth";
 
 const timestamps = {
   createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -19,6 +20,8 @@ const timestamps = {
 /* ======================
    ENUMS
 ====================== */
+export const majorEnum = pgEnum("major", ["CS", "IT", "IS", "AI", "DS"]);
+
 export const internshipStatusEnum = pgEnum("internship_status", [
   "active",
   "inactive",
@@ -39,13 +42,14 @@ export const students = pgTable(
   "students",
   {
     id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
     nationalId: varchar("national_id", { length: 50 }).notNull(),
     fullName: varchar("full_name", { length: 200 }).notNull(),
-    email: varchar("email", { length: 255 }).notNull(),
-    password: varchar("password", { length: 255 }).notNull(),
     city: varchar("city", { length: 100 }).notNull(),
     gpa: numeric("gpa", { precision: 3, scale: 2 }).notNull(),
-    major: varchar("major", { length: 100 }).notNull(),
+    major: majorEnum("major").notNull(),
     bioText: text("bio_text"),
     profileViews: integer("profile_views").default(0),
     ...timestamps,
@@ -53,7 +57,7 @@ export const students = pgTable(
   (t) => ({
     // prevents duplicates and can search faster
     nationalIdUnique: uniqueIndex("uq_students_national_id").on(t.nationalId),
-    emailUnique: uniqueIndex("uq_students_email").on(t.email),
+    userIdUnique: uniqueIndex("uq_students_user_id").on(t.userId),
   }),
 );
 
@@ -64,13 +68,14 @@ export const companies = pgTable(
   "companies",
   {
     id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
     companyName: varchar("company_name", { length: 150 }).notNull(),
-    email: varchar("email", { length: 255 }).notNull(),
-    password: varchar("password", { length: 255 }).notNull(),
     ...timestamps,
   },
   (t) => ({
-    emailUnique: uniqueIndex("uq_companies_email").on(t.email),
+    userIdUnique: uniqueIndex("uq_companies_user_id").on(t.userId),
   }),
 );
 
@@ -84,10 +89,10 @@ export const internships = pgTable("internships", {
     .references(() => companies.id, { onDelete: "cascade" }),
   title: varchar("title", { length: 200 }).notNull(),
   description: text("description"),
-  requiredMajor: varchar("required_major", { length: 100 }).notNull(),
+  requiredMajor: majorEnum("required_major").notNull(),
   city: varchar("city", { length: 100 }).notNull(),
   minGpa: numeric("min_gpa", { precision: 3, scale: 2 }),
-  capacity: integer("capacity"),
+  capacity: integer("capacity").notNull(),
   status: internshipStatusEnum("status").default("active").notNull(),
   ...timestamps,
 });

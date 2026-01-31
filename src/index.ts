@@ -5,9 +5,18 @@ import internshipsRouter from "./routes/internships";
 const PORT = 8000;
 const app = express();
 
+// app.use(
+//   cors({
+//     origin: process.env.FRONTEND_URL,
+//   }),
+// );
+const frontendOrigin = process.env.FRONTEND_URL;
+if (!frontendOrigin) {
+  throw new Error("FRONTEND_URL must be set to enable CORS");
+}
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+    origin: frontendOrigin,
   }),
 );
 

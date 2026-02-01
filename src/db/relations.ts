@@ -7,7 +7,6 @@ import {
   user,
   session,
   account,
-  verification,
 } from "./schema";
 
 /* STUDENTS */

@@ -63,16 +63,24 @@ export async function registerStudent(data: RegisterStudentDTO) {
     throw new RegistrationError("Failed to create user account");
   }
 
-  // Create student profile
-  await db.insert(students).values({
-    userId: result.user.id,
-    nationalId: data.nationalId,
-    fullName: data.fullName,
-    city: data.city,
-    gpa: data.gpa.toString(),
-    major: data.major,
-    bioText: data.bioText,
-  });
-
+  // Add a try-catch to delete the auth user if the insert fails.
+  try {
+    // Create student profile
+    await db.insert(students).values({
+      userId: result.user.id,
+      nationalId: data.nationalId,
+      fullName: data.fullName,
+      city: data.city,
+      gpa: data.gpa.toString(),
+      major: data.major,
+      bioText: data.bioText,
+    });
+  } catch (error) {
+    // Remove the orphaned auth user to allow retries
+    await db.delete(user).where(eq(user.id, result.user.id));
+    throw new RegistrationError(
+      "Failed to create student profile, User deleted",
+    );
+  }
   return result.user;
 }

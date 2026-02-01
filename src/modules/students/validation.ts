@@ -39,7 +39,7 @@ export function validateStudentRegistration(data: RegisterStudentDTO): {
     errors.push({ field: "bioText", message: "Bio text is required" });
 
   // Validate GPA range
-  if (data.gpa !== undefined && (data.gpa < 0 || data.gpa > 4)) {
+  if (Number.isFinite(data.gpa) && (data.gpa < 0 || data.gpa > 4)) {
     errors.push({ field: "gpa", message: "GPA must be between 0 and 4" });
   }
 

@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import { registerStudent, DuplicateNationalIdError } from "./service";
-import { validateStudentRegistration } from "./validation";
+import { registerCompany } from "./service";
+import { validateCompanyRegistration } from "./validation";
 import { DuplicateEmailError, RegistrationError } from "../shared/errorHandler";
 
-export async function registerStudentController(req: Request, res: Response) {
+export async function registerCompanyController(req: Request, res: Response) {
   try {
     // Validate request body
-    const validation = validateStudentRegistration(req.body);
+    const validation = validateCompanyRegistration(req.body);
     if (!validation.valid) {
       return res.status(400).json({
         error: "Validation failed",
@@ -14,8 +14,8 @@ export async function registerStudentController(req: Request, res: Response) {
       });
     }
 
-    // Register student
-    const user = await registerStudent(req.body);
+    // Register company
+    const user = await registerCompany(req.body);
     return res.status(201).json({ userId: user.id });
   } catch (error) {
     console.error("Registration error:", error);
@@ -25,13 +25,6 @@ export async function registerStudentController(req: Request, res: Response) {
       return res.status(409).json({
         error: "Email already exists",
         message: "An account with this email already exists",
-      });
-    }
-
-    if (error instanceof DuplicateNationalIdError) {
-      return res.status(409).json({
-        error: "National ID already exists",
-        message: "A student with this national ID is already registered",
       });
     }
 

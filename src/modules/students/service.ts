@@ -1,28 +1,14 @@
 import { db } from "../../db";
 import { students, user } from "../../db/schema";
 import { RegisterStudentDTO } from "./validation";
-import { auth } from "../../lib/auth";
 import { eq } from "drizzle-orm";
-
-// better error handling
-export class DuplicateEmailError extends Error {
-  constructor(message = "Email already exists") {
-    super(message);
-    this.name = "DuplicateEmailError";
-  }
-}
+import { DuplicateEmailError, RegistrationError } from "../shared/errorHandler";
+import { createAuthUser, createStudentProfile } from "../shared/authService";
 
 export class DuplicateNationalIdError extends Error {
   constructor(message = "National ID already exists") {
     super(message);
     this.name = "DuplicateNationalIdError";
-  }
-}
-
-export class RegistrationError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "RegistrationError";
   }
 }
 
@@ -50,29 +36,28 @@ export async function registerStudent(data: RegisterStudentDTO) {
   }
 
   // Create auth user
-  const result = await auth.api.signUpEmail({
-    body: {
-      email: data.email,
-      password: data.password,
-      name: data.fullName,
-      role: "student",
-    },
-  });
+  const authUser = await createAuthUser(
+    data.email,
+    data.password,
+    data.fullName,
+    "student",
+  );
 
-  if (!result?.user) {
-    throw new RegistrationError("Failed to create user account");
+  // Create student profile with rollback on failure
+  try {
+    await createStudentProfile(authUser.id, {
+      nationalId: data.nationalId,
+      fullName: data.fullName,
+      city: data.city,
+      gpa: data.gpa.toString(),
+      major: data.major,
+      bioText: data.bioText,
+    });
+  } catch (error) {
+    // Remove orphaned auth user to allow retries
+    await db.delete(user).where(eq(user.id, authUser.id));
+    throw new RegistrationError("Failed to create student profile");
   }
 
-  // Create student profile
-  await db.insert(students).values({
-    userId: result.user.id,
-    nationalId: data.nationalId,
-    fullName: data.fullName,
-    city: data.city,
-    gpa: data.gpa.toString(),
-    major: data.major,
-    bioText: data.bioText,
-  });
-
-  return result.user;
+  return authUser;
 }

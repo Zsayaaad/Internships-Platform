@@ -50,7 +50,7 @@ export const students = pgTable(
     city: varchar("city", { length: 100 }).notNull(),
     gpa: numeric("gpa", { precision: 3, scale: 2 }).notNull(),
     major: majorEnum("major").notNull(),
-    bioText: text("bio_text"),
+    bioText: text("bio_text").notNull(),
     profileViews: integer("profile_views").default(0),
     ...timestamps,
   },

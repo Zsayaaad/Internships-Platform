@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1769791298606,
-      "tag": "0000_giant_forgotten_one",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1769881580848,
-      "tag": "0001_bitter_payback",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1769885643997,
-      "tag": "0002_right_post",
+      "when": 1769959528734,
+      "tag": "0000_naive_warpath",
       "breakpoints": true
     }
   ]

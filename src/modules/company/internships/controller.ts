@@ -102,10 +102,16 @@ export async function updateInternshipController(req: Request, res: Response) {
       return res.status(400).json({ error: "Invalid internship ID" });
     }
 
-    const internshipId = parseInt(id);
-    // if (isNaN(internshipId)) {
-    //   return res.status(400).json({ error: "Invalid internship ID" });
-    // }
+    // const internshipId = parseInt(id);
+    // // if (isNaN(internshipId)) {
+    // //   return res.status(400).json({ error: "Invalid internship ID" });
+    // // }
+
+    // Base 10 (decimal system) codeRabbit suggestion: will coerce values like "123abc" to 123
+    const internshipId = Number.parseInt(id, 10);
+    if (!Number.isInteger(internshipId) || internshipId <= 0) {
+      return res.status(400).json({ error: "Invalid internship ID" });
+    }
 
     // Validate update data
     const validation = validateInternshipUpdate(req.body);
@@ -171,10 +177,15 @@ export async function deleteInternshipController(req: Request, res: Response) {
       return res.status(400).json({ error: "Invalid internship ID" });
     }
 
-    const internshipId = parseInt(id);
-    // if (isNaN(internshipId)) {
-    //   return res.status(400).json({ error: "Invalid internship ID" });
-    // }
+    // const internshipId = parseInt(id);
+    // // if (isNaN(internshipId)) {
+    // //   return res.status(400).json({ error: "Invalid internship ID" });
+    // // }
+
+    const internshipId = Number.parseInt(id, 10); // codeRabbit suggestion
+    if (!Number.isInteger(internshipId) || internshipId <= 0) {
+      return res.status(400).json({ error: "Invalid internship ID" });
+    }
 
     await deleteInternshipService(req.user.id, internshipId);
 

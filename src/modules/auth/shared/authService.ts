@@ -83,7 +83,6 @@ export async function authenticateUser(
     console.error("Authentication error:", error);
     return res.status(401).json({
       error: "Authentication failed",
-      details: error instanceof Error ? error.message : String(error),
     });
   }
 }
@@ -100,8 +99,6 @@ export function requireRole(...roles: string[]) {
     if (!roles.includes(req.user.role)) {
       return res.status(403).json({
         error: "Insufficient permissions",
-        required: roles,
-        current: req.user.role,
       });
     }
 

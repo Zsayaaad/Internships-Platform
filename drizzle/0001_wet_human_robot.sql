@@ -1,0 +1,1 @@
+ALTER TABLE "internships" ALTER COLUMN "min_gpa" SET NOT NULL;

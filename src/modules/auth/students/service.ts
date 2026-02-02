@@ -1,9 +1,10 @@
-import { db } from "../../db";
-import { students, user } from "../../db/schema";
+import { db } from "../../../db";
+import { students, user } from "../../../db/schema";
 import { RegisterStudentDTO } from "./validation";
 import { eq } from "drizzle-orm";
 import { DuplicateEmailError, RegistrationError } from "../shared/errorHandler";
-import { createAuthUser, createStudentProfile } from "../shared/authService";
+import { createAuthUser } from "../shared/authService";
+import { createStudentProfile } from "./repository";
 
 export class DuplicateNationalIdError extends Error {
   constructor(message = "National ID already exists") {

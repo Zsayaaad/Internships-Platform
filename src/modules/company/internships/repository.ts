@@ -1,0 +1,67 @@
+import { db } from "../../../db";
+import { internships } from "../../../db/schema";
+import { eq } from "drizzle-orm";
+import { NewInternship } from "../../../db/schema/app";
+
+/**
+ * Create a new internship
+ */
+export async function createInternship(internshipData: NewInternship) {
+  const [internship] = await db
+    .insert(internships)
+    .values(internshipData)
+    .returning(); // give me back what i just inserted
+
+  return internship;
+}
+
+/**
+ * Get all internships for a company
+ */
+export async function getInternshipsByCompanyId(companyId: number) {
+  return await db
+    .select()
+    .from(internships)
+    .where(eq(internships.companyId, companyId));
+}
+
+/**
+ * Get internship by ID
+ */
+export async function getInternshipById(internshipId: number) {
+  const [internship] = await db
+    .select()
+    .from(internships)
+    .where(eq(internships.id, internshipId))
+    .limit(1);
+
+  return internship;
+}
+
+/**
+ * Update internship
+ */
+export async function updateInternship(
+  internshipId: number,
+  data: Partial<NewInternship>,
+) {
+  const [internship] = await db
+    .update(internships)
+    .set({ ...data, updatedAt: new Date() })
+    .where(eq(internships.id, internshipId))
+    .returning();
+
+  return internship;
+}
+
+/**
+ * Delete internship
+ */
+export async function deleteInternship(internshipId: number) {
+  const [internship] = await db
+    .delete(internships)
+    .where(eq(internships.id, internshipId))
+    .returning();
+
+  return internship;
+}

@@ -3,7 +3,9 @@ import cors from "cors";
 import internshipsRouter from "./routes/internships";
 import authStudentRoute from "./modules/auth/students/routes";
 import authCompanyRoute from "./modules/auth/companies/routes";
-import companyRoutes from "./modules/company/internships/routes";
+import internshipCompanyRoutes from "./modules/internships/company/routes";
+import internshipStudentRoutes from "./modules/internships/student/routes";
+import studentRoute from "./modules/student/routes";
 // import authRouter from "./routes/auth";
 import { toNodeHandler } from "better-auth/node";
 import { auth } from "./lib/auth";
@@ -25,9 +27,14 @@ app.use(express.json());
 
 app.use("/api/internships", internshipsRouter);
 // Custom auth routes (must come before better-auth catch-all)
-app.use("/api/student", authStudentRoute);
-app.use("/api/company", authCompanyRoute);
-app.use("/api/company", companyRoutes);
+app.use("/api/auth/student", authStudentRoute);
+app.use("/api/auth/company", authCompanyRoute);
+
+app.use("/api/company", internshipCompanyRoutes);
+
+app.use("/api/student", internshipStudentRoutes);
+
+app.use("/api/student", studentRoute);
 
 // Better-auth handler (catch-all for remaining auth routes)
 app.all("/api/auth/*splat", toNodeHandler(auth));

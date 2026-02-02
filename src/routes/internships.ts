@@ -21,7 +21,7 @@ router.get("/", async (req, res) => {
     // If search query exists, filter by internship title or major and probably city too
     if (search) {
       filterConditions.push(
-        // or() coming from drizzle and make insensitive pattern match
+        // or() make insensitive pattern match
         or(
           ilike(internships.title, `%${search}%`),
           ilike(internships.requiredMajor, `%${search}%`),

@@ -1,7 +1,8 @@
+import { eq, or } from "drizzle-orm";
 import { db } from "../../../db";
-import { internships } from "../../../db/schema";
-import { eq } from "drizzle-orm";
-import { NewInternship } from "../../../db/schema/app";
+import { internships, NewInternship } from "../../../db/schema";
+import { getStudentByUserId } from "../../student/repository";
+import { InternshipError } from "../../auth/shared/errorHandler";
 
 /**
  * Create a new internship

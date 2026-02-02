@@ -20,7 +20,8 @@ const timestamps = {
 /* ======================
    ENUMS
 ====================== */
-export const majorEnum = pgEnum("major", ["CS", "IT", "IS", "AI", "DS"]);
+export const majorValues = ["CS", "IT", "IS", "AI", "DS"] as const;
+export const majorEnum = pgEnum("major", majorValues);
 
 export const internshipStatusEnum = pgEnum("internship_status", [
   "active",

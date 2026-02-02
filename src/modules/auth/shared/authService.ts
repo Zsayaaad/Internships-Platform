@@ -97,6 +97,8 @@ export function requireRole(...roles: string[]) {
     }
 
     if (!roles.includes(req.user.role)) {
+      // Why std gets here ???
+
       return res.status(403).json({
         error: "Insufficient permissions",
       });

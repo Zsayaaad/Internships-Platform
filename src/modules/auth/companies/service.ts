@@ -1,9 +1,10 @@
 import { eq } from "drizzle-orm";
-import { user } from "../../db/schema";
+import { user } from "../../../db/schema";
 import { DuplicateEmailError, RegistrationError } from "../shared/errorHandler";
-import { db } from "../../db";
+import { db } from "../../../db";
 import { RegisterCompanyDTO } from "./validation";
-import { createAuthUser, createCompanyProfile } from "../shared/authService";
+import { createAuthUser } from "../shared/authService";
+import { createCompanyProfile } from "./repository";
 
 export async function registerCompany(data: RegisterCompanyDTO) {
   // Check if email already exists

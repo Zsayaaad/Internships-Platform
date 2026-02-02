@@ -91,7 +91,7 @@ export const internships = pgTable("internships", {
   description: text("description"),
   requiredMajor: majorEnum("required_major").notNull(),
   city: varchar("city", { length: 100 }).notNull(),
-  minGpa: numeric("min_gpa", { precision: 3, scale: 2 }),
+  minGpa: numeric("min_gpa", { precision: 3, scale: 2 }).notNull(),
   capacity: integer("capacity").notNull(),
   status: internshipStatusEnum("status").default("active").notNull(),
   ...timestamps,

@@ -1,17 +1,19 @@
+import { Internship } from "../../../db/schema";
+
 export interface ValidationError {
   message: string;
 }
 
-export interface InternshipPostData {
-  title: string;
-  description?: string;
-  requiredMajor: string;
-  city: string;
-  minGpa: string | number;
-  capacity: number;
-}
+// export interface InternshipPostData {
+//   title: string;
+//   description?: string;
+//   requiredMajor: string;
+//   city: string;
+//   minGpa: string | number;
+//   capacity: number;
+// }
 
-export function validatePostingInternship(data: InternshipPostData): {
+export function validatePostingInternship(data: Internship): {
   valid: boolean;
   errors: ValidationError[];
 } {
@@ -59,17 +61,17 @@ export function validatePostingInternship(data: InternshipPostData): {
   };
 }
 
-export interface InternshipUpdateData {
-  title?: string;
-  description?: string;
-  requiredMajor?: string;
-  city?: string;
-  minGpa?: string | number;
-  capacity?: number;
-  status?: string;
-}
+// export interface InternshipUpdateData {
+//   title?: string;
+//   description?: string;
+//   requiredMajor?: string;
+//   city?: string;
+//   minGpa?: string | number;
+//   capacity?: number;
+//   status?: string;
+// }
 
-export function validateInternshipUpdate(data: InternshipUpdateData): {
+export function validateInternshipUpdate(data: Internship): {
   valid: boolean;
   errors: ValidationError[];
 } {

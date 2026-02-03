@@ -1,17 +1,19 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import {
   createInternshipService,
   getCompanyInternshipsService,
   updateInternshipService,
   deleteInternshipService,
-  InternshipError,
-  UnauthorizedError,
 } from "./service";
 import {
   validatePostingInternship,
   validateInternshipUpdate,
 } from "./validations";
 import { getInternshipById } from "./repository";
+import {
+  InternshipError,
+  UnauthorizedError,
+} from "../../auth/shared/errorHandler";
 
 /**
  * POST /api/company/internships - Create a new internship
@@ -66,6 +68,7 @@ export async function createInternshipController(req: Request, res: Response) {
 export async function getCompanyInternshipsController(
   req: Request,
   res: Response,
+  next: NextFunction,
 ) {
   try {
     const internships = await getCompanyInternshipsService(req.user.id);
@@ -101,11 +104,6 @@ export async function updateInternshipController(req: Request, res: Response) {
     if (!id || typeof id !== "string") {
       return res.status(400).json({ error: "Invalid internship ID" });
     }
-
-    // const internshipId = parseInt(id);
-    // // if (isNaN(internshipId)) {
-    // //   return res.status(400).json({ error: "Invalid internship ID" });
-    // // }
 
     // Base 10 (decimal system) codeRabbit suggestion: will coerce values like "123abc" to 123
     const internshipId = Number.parseInt(id, 10);

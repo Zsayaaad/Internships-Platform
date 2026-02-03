@@ -1,3 +1,9 @@
+import { NewInternship } from "../../../db/schema";
+import {
+  InternshipError,
+  UnauthorizedError,
+} from "../../auth/shared/errorHandler";
+import { getCompanyByUserId } from "../../company/repository";
 import {
   createInternship,
   getInternshipsByCompanyId,
@@ -5,22 +11,6 @@ import {
   updateInternship,
   deleteInternship,
 } from "./repository";
-import { NewInternship } from "../../../db/schema/app";
-import { getCompanyByUserId } from "../repository";
-
-export class InternshipError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "InternshipError";
-  }
-}
-
-export class UnauthorizedError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "UnauthorizedError";
-  }
-}
 
 /**
  * Create a new internship for a company

@@ -12,3 +12,17 @@ export class RegistrationError extends Error {
     this.name = "RegistrationError";
   }
 }
+
+export class InternshipError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "InternshipError";
+  }
+}
+
+export class UnauthorizedError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "UnauthorizedError";
+  }
+}

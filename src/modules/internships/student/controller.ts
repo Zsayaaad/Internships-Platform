@@ -49,8 +49,7 @@ export async function applyToInternshipController(req: Request, res: Response) {
       return res.status(400).json({ error: "Invalid internship ID" });
     }
 
-    // Base 10 (decimal system) codeRabbit suggestion: will coerce values like "123abc" to 123
-    const internshipId = Number.parseInt(internshipIdParam, 10);
+    const internshipId = Number(internshipIdParam);
     const { wishOrder } = req.body;
 
     // Validate request data
@@ -83,7 +82,14 @@ export async function applyToInternshipController(req: Request, res: Response) {
     }
 
     // Handle unique constraint violations
-    if (error instanceof Error && error.message.includes("unique")) {
+    /**
+     * error.message.includes("unique") is brittle. With Drizzle + Neon
+     * database errors are wrapped with the underlying PostgreSQL error attached at error.cause.
+     * Check the error code (Postgres 23505 for unique constraint violations) or constraint name when available.
+     */
+    const pgError = (error as any)?.cause;
+    // if (error instanceof Error && error.message.includes("unique")) {
+    if (pgError && typeof pgError === "object" && pgError.code === "23505") {
       return res.status(409).json({
         error: "Duplicate application",
         message:

@@ -71,5 +71,5 @@ export function validateUpdateStudentProfile(data: any) {
     return { valid: false, errors };
   }
 
-  return { valid: true, errors: null };
+  return { valid: true, errors: [] };
 }

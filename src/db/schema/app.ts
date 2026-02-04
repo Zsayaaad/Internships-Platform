@@ -26,9 +26,14 @@ export const majorEnum = pgEnum("major", majorValues);
 export const internshipStatusEnum = pgEnum("internship_status", [
   "active",
   "inactive",
-  "filled",
 ]);
 
+export const applicationStatusValues = [
+  "pending",
+  "accepted",
+  "rejected",
+  "withdrawn",
+] as const;
 export const applicationStatusEnum = pgEnum("application_status", [
   "pending",
   "accepted",

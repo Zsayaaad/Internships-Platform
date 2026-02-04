@@ -138,36 +138,6 @@ export async function getCompanyApplicationsService(
 }
 
 /**
- * Update application status (accept/reject)
- */
-// export async function updateApplicationStatusService(
-//   userId: string,
-//   applicationId: number,
-//   status: "pending" | "accepted" | "rejected" | "withdrawn",
-// ) {
-//   const company = await getCompanyByUserId(userId);
-//   if (!company) {
-//     throw new CompanyNotFoundError();
-//   }
-
-//   const application = await getApplicationById(applicationId);
-//   if (!application) {
-//     throw new ApplicationNotFoundError();
-//   }
-
-//   // Verify this application belongs to this company's internship
-//   if (application.companyId !== company.id) {
-//     throw new UnauthorizedAccessError(
-//       "You can only manage applications for your own internships",
-//     );
-//   }
-
-//   // Update application status
-//   const updated = await updateApplicationStatus(applicationId, status);
-//   return updated;
-// }
-
-/**
  * Run selection algorithm for a specific internship
  * Calculates scores based on: wish order, major match, and contextual GPA
  */
@@ -211,6 +181,7 @@ export async function runSelectionAlgorithmService(
     ["AI", "DS"], // Data Science cluster
   ];
 
+  //   Related cluster = 25
   function getMajorCluster(major: string): string[] | null {
     for (const cluster of majorClusters) {
       if (cluster.includes(major)) {

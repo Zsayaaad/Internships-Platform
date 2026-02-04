@@ -117,7 +117,7 @@ export async function getCompanyApplicationsController(
     const parsedFilters = {
       major: major,
       city: city,
-      minGpa: minGpa,
+      minGpa: minGpa ? parseFloat(minGpa as string) : undefined,
       bioKeyword: bioKeyword,
       page: parseInt(page as string, 10),
       limit: parseInt(limit as string, 10),

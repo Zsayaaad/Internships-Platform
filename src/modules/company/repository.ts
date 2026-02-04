@@ -5,6 +5,7 @@ import {
   applications,
   internships,
 } from "../../db/schema";
+import { user } from "../../db/schema/auth";
 import {
   eq,
   and,
@@ -266,7 +267,7 @@ export async function getCompanyApplications(filters: {
       // Student fields
       studentId: students.id,
       studentName: students.fullName,
-      studentEmail: students.nationalId,
+      studentEmail: user.email,
       studentCity: students.city,
       studentGpa: students.gpa,
       studentMajor: students.major,
@@ -283,6 +284,7 @@ export async function getCompanyApplications(filters: {
     })
     .from(applications)
     .innerJoin(students, eq(applications.studentId, students.id))
+    .innerJoin(user, eq(students.userId, user.id))
     .innerJoin(internships, eq(applications.internshipId, internships.id))
     .where(whereClause)
     .orderBy(desc(applications.createdAt))

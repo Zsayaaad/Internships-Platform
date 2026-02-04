@@ -54,3 +54,11 @@ app.get("/", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);
 });
+
+/**
+ * Test Scenarios
+ * - Scenario: Student Views Eligible Internships
+ * - Scenario: Company Searches Students
+ * - Scenario: Run Matching Algorithm
+ * -
+ */

@@ -22,6 +22,7 @@ router.get(
   requireRole("company"),
   getCompanyInternshipsController,
 );
+
 router.patch(
   "/internships/:id",
   requireRole("company"),

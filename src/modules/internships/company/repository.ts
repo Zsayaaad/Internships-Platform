@@ -1,4 +1,4 @@
-import { eq, or } from "drizzle-orm";
+import { eq, or, and, count } from "drizzle-orm";
 import { db } from "../../../db";
 import { internships, NewInternship } from "../../../db/schema";
 import { getStudentByUserId } from "../../student/repository";
@@ -65,4 +65,24 @@ export async function deleteInternship(internshipId: number) {
     .returning();
 
   return internship;
+}
+
+/**
+ * Count internships by company and major
+ */
+export async function countInternshipsByCompanyAndMajor(
+  companyId: number,
+  major: "CS" | "IT" | "IS" | "AI" | "DS",
+) {
+  const [result] = await db
+    .select({ count: count() })
+    .from(internships)
+    .where(
+      and(
+        eq(internships.companyId, companyId),
+        eq(internships.requiredMajor, major),
+      ),
+    );
+
+  return result?.count ?? 0;
 }

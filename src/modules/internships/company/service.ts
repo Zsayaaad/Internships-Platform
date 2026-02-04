@@ -10,6 +10,7 @@ import {
   getInternshipById,
   updateInternship,
   deleteInternship,
+  countInternshipsByCompanyAndMajor,
 } from "./repository";
 
 /**
@@ -32,6 +33,18 @@ export async function createInternshipService(
   if (!company) {
     throw new InternshipError(
       "Company profile not found. Please complete your company profile first.",
+    );
+  }
+
+  // Check if company already has 2 internships with the same requiredMajor
+  const existingCount = await countInternshipsByCompanyAndMajor(
+    company.id,
+    internshipData.requiredMajor,
+  );
+
+  if (existingCount >= 2) {
+    throw new InternshipError(
+      `You have already posted 2 internships for ${internshipData.requiredMajor} major. Maximum limit reached.`,
     );
   }
 

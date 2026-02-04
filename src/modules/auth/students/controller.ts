@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { registerStudent, DuplicateNationalIdError } from "./service";
 import { validateStudentRegistration } from "./validation";
 import { DuplicateEmailError, RegistrationError } from "../shared/errorHandler";
+import { signOutUser } from "../shared/authService";
 
 export async function registerStudentController(req: Request, res: Response) {
   try {
@@ -54,6 +55,37 @@ export async function registerStudentController(req: Request, res: Response) {
     return res.status(500).json({
       error: "Internal server error",
       message: "An unexpected error occurred",
+    });
+  }
+}
+
+/**
+ * POST /api/auth/students/signout - Sign out student
+ */
+export async function signOutStudentController(req: Request, res: Response) {
+  try {
+    // Get token from session (attached by authenticateUser middleware)
+    const sessionToken = req.session?.token;
+
+    if (!sessionToken) {
+      return res.status(401).json({
+        error: "No active session",
+        message: "You are not logged in",
+      });
+    }
+
+    // Delete session from database
+    await signOutUser(sessionToken);
+
+    return res.status(200).json({
+      message: "Successfully signed out",
+    });
+  } catch (error) {
+    console.error("Sign out error:", error);
+
+    return res.status(500).json({
+      error: "Internal server error",
+      message: "Failed to sign out",
     });
   }
 }

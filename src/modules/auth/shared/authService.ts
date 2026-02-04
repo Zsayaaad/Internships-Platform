@@ -189,3 +189,20 @@ export async function createAuthUser(
 
   return result.user;
 }
+
+/**
+ * Sign out user by deleting their session from database
+ */
+export async function signOutUser(sessionToken: string) {
+  try {
+    const [deletedSession] = await db
+      .delete(session)
+      .where(eq(session.token, sessionToken))
+      .returning();
+
+    return deletedSession;
+  } catch (error) {
+    console.error("Sign out error:", error);
+    throw new Error("Failed to sign out");
+  }
+}

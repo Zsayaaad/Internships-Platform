@@ -114,7 +114,7 @@ export async function getStudentApplications(studentId: number) {
       internshipMinGpa: internships.minGpa,
     })
     .from(applications)
-    .innerJoin(internships, eq(applications.internshipId, internships.id))
+    .innerJoin(internships, eq(applications.internshipId, internships.id)) // Show only students in BOTH tables
     .where(eq(applications.studentId, studentId))
     .orderBy(applications.wishOrder);
 }

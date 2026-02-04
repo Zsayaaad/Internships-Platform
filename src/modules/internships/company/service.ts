@@ -78,7 +78,7 @@ export async function updateInternshipService(
     city: string;
     minGpa: string;
     capacity: number;
-    status: "active" | "inactive" | "filled";
+    status: "active" | "inactive";
   }>,
 ) {
   const company = await getCompanyByUserId(userId);

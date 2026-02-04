@@ -79,7 +79,7 @@ export function validateInternshipUpdate(data: Internship): {
 
   // Validate status if provided
   if (data.status) {
-    const validStatuses = ["active", "inactive", "filled"];
+    const validStatuses = ["active", "inactive"];
     if (!validStatuses.includes(data.status)) {
       errors.push({
         message: `status must be one of: ${validStatuses.join(", ")}`,

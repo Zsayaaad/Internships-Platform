@@ -1,6 +1,6 @@
-# Platform Backend
+# internships platform
 
-A comprehensive internship management platform backend built with Express.js, TypeScript, and PostgreSQL. This system enables students to discover and apply for internships while companies can post opportunities and manage applications using an intelligent selection algorithm.
+A comprehensive internships management platform built with Express.js, TypeScript, and PostgreSQL. This system enables students to discover and apply for internships while companies can post opportunities and manage applications using an intelligent selection algorithm.
 
 ## 📋 Table of Contents
 

@@ -1,6 +1,12 @@
 import express from "express";
 import cors from "cors";
 import internshipsRouter from "./routes/internships";
+import authStudentRoute from "./modules/auth/students/routes";
+import authCompanyRoute from "./modules/auth/companies/routes";
+import internshipCompanyRoutes from "./modules/internships/company/routes";
+import internshipStudentRoutes from "./modules/internships/student/routes";
+import studentRoute from "./modules/student/routes";
+import companyRoute from "./modules/company/routes";
 import authRouter from "./routes/auth";
 import { toNodeHandler } from "better-auth/node";
 import { auth } from "./lib/auth";
@@ -18,11 +24,29 @@ app.use(
   }),
 );
 
-app.all("/api/auth/*splat", toNodeHandler(auth));
-
 app.use(express.json());
 app.use("/api/auth", authRouter);
+
+// Internship routes
 app.use("/api/internships", internshipsRouter);
+
+// Custom auth routes (must come before better-auth catch-all)
+// Auth routes for students and companies
+app.use("/api/auth/student", authStudentRoute);
+app.use("/api/auth/company", authCompanyRoute);
+
+// Internship routes for companies and students
+app.use("/api/company", internshipCompanyRoutes);
+app.use("/api/student", internshipStudentRoutes);
+
+// Student route
+app.use("/api/student", studentRoute);
+
+// Company route
+app.use("/api/company", companyRoute);
+
+// Better-auth handler (catch-all for remaining auth routes)
+app.all("/api/auth/*splat", toNodeHandler(auth));
 
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to the Platform API" });
@@ -31,3 +55,11 @@ app.get("/", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);
 });
+
+/**
+ * Test Scenarios
+ * - Scenario: Student Views Eligible Internships
+ * - Scenario: Company Searches Students
+ * - Scenario: Run Matching Algorithm
+ * -
+ */

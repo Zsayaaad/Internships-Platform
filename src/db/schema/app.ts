@@ -20,14 +20,20 @@ const timestamps = {
 /* ======================
    ENUMS
 ====================== */
-export const majorEnum = pgEnum("major", ["CS", "IT", "IS", "AI", "DS"]);
+export const majorValues = ["CS", "IT", "IS", "AI", "DS"] as const;
+export const majorEnum = pgEnum("major", majorValues);
 
 export const internshipStatusEnum = pgEnum("internship_status", [
   "active",
   "inactive",
-  "filled",
 ]);
 
+export const applicationStatusValues = [
+  "pending",
+  "accepted",
+  "rejected",
+  "withdrawn",
+] as const;
 export const applicationStatusEnum = pgEnum("application_status", [
   "pending",
   "accepted",
@@ -50,7 +56,7 @@ export const students = pgTable(
     city: varchar("city", { length: 100 }).notNull(),
     gpa: numeric("gpa", { precision: 3, scale: 2 }).notNull(),
     major: majorEnum("major").notNull(),
-    bioText: text("bio_text"),
+    bioText: text("bio_text").notNull(),
     profileViews: integer("profile_views").default(0),
     ...timestamps,
   },
@@ -91,7 +97,7 @@ export const internships = pgTable("internships", {
   description: text("description"),
   requiredMajor: majorEnum("required_major").notNull(),
   city: varchar("city", { length: 100 }).notNull(),
-  minGpa: numeric("min_gpa", { precision: 3, scale: 2 }),
+  minGpa: numeric("min_gpa", { precision: 3, scale: 2 }).notNull(),
   capacity: integer("capacity").notNull(),
   status: internshipStatusEnum("status").default("active").notNull(),
   ...timestamps,

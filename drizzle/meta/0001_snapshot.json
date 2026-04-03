@@ -1,6 +1,6 @@
 {
-  "id": "00fe418f-4d40-4940-b382-a5bad30b8c4c",
-  "prevId": "ca987cfd-5b1d-4b5a-b03e-610ccb9d41c0",
+  "id": "f76236de-984f-4ffc-9e64-1b2c7b49d3c0",
+  "prevId": "9e123b08-39ff-44d6-a787-db0c17851f04",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -271,7 +271,8 @@
         },
         "required_major": {
           "name": "required_major",
-          "type": "varchar(100)",
+          "type": "major",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -285,13 +286,13 @@
           "name": "min_gpa",
           "type": "numeric(3, 2)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "capacity": {
           "name": "capacity",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "status": {
           "name": "status",
@@ -391,7 +392,8 @@
         },
         "major": {
           "name": "major",
-          "type": "varchar(100)",
+          "type": "major",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -399,7 +401,7 @@
           "name": "bio_text",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "profile_views": {
           "name": "profile_views",
@@ -812,6 +814,17 @@
         "active",
         "inactive",
         "filled"
+      ]
+    },
+    "public.major": {
+      "name": "major",
+      "schema": "public",
+      "values": [
+        "CS",
+        "IT",
+        "IS",
+        "AI",
+        "DS"
       ]
     },
     "public.role": {

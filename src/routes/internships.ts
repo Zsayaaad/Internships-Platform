@@ -1,4 +1,4 @@
-import { and, count, desc, getTableColumns, ilike, or } from "drizzle-orm";
+import { and, count, desc, getTableColumns, ilike, or, sql } from "drizzle-orm";
 import express from "express";
 import { internships } from "../db/schema";
 import { db } from "../db";
@@ -21,10 +21,11 @@ router.get("/", async (req, res) => {
     // If search query exists, filter by internship title or major and probably city too
     if (search) {
       filterConditions.push(
-        // or() coming from drizzle and make insensitive pattern match
+        // or() make insensitive pattern match
         or(
+          sql`CAST(${internships.requiredMajor} AS TEXT) ILIKE ${`%${search}%`}`, // Cast enum to text
           ilike(internships.title, `%${search}%`),
-          ilike(internships.requiredMajor, `%${search}%`),
+          // ilike(internships.requiredMajor, `%${search}%`),
           ilike(internships.city, `%${search}%`),
         ),
       );
@@ -32,7 +33,10 @@ router.get("/", async (req, res) => {
 
     // If major filter exists, match by major name
     if (major) {
-      filterConditions.push(ilike(internships.requiredMajor, `%${major}%`));
+      // filterConditions.push(ilike(internships.requiredMajor, `%${major}%`));
+      filterConditions.push(
+        sql`CAST(${internships.requiredMajor} AS TEXT) ILIKE ${`%${major}%`}`,
+      );
     }
 
     //  Combine all filters ==> AND (search match) AND (major match) ✓ correct
@@ -47,6 +51,7 @@ router.get("/", async (req, res) => {
 
     const totalCount = countResult[0]?.count ?? 0; // ??0 =>  If the left is null or undefined, use 0 instead
 
+    // Get paginated internships
     const internshipsList = await db
       .select({
         ...getTableColumns(internships),

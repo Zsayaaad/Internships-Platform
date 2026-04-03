@@ -41,11 +41,11 @@ export const user = pgTable(
    SESSION
 ====================== */
 export const session = pgTable("session", {
-  id: text("id").primaryKey(),
+  id: text("id").primaryKey(), // Unique identifier for each session
   expiresAt: timestamp("expires_at").notNull(),
   token: text("token").notNull(),
   ipAddress: text("ip_address"),
-  userAgent: text("user_agent"),
+  userAgent: text("user_agent"), // means from where u do ur request(Browser | HTTPi | postman..etc )
   userId: text("user_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
@@ -54,20 +54,27 @@ export const session = pgTable("session", {
 
 /* ======================
    ACCOUNT
+   The account table is essentially a mapping: "This external provider account belongs to this user in our system."
 ====================== */
 export const account = pgTable("account", {
-  id: text("id").primaryKey(),
-  accountId: text("account_id").notNull(),
-  providerId: text("provider_id").notNull(),
+  id: text("id").primaryKey(), // Unique identifier for each account
+  accountId: text("account_id").notNull(), // accountId - External provider's ID
+  /**
+   * - based on th method of login(The ID that Google/GitHub/Facebook or (email&password) uses for that user )
+   * - Login with Google → one account record (accountId = providerId(Google's ID), userId = your user ID)
+   * - Login with GitHub → another account record (accountId = providerId(GitHub's ID), same userId)
+   * - Email/password → another account record (accountId could be email, same userId)
+   */
+  providerId: text("provider_id").notNull(), // Google → providerId = "104958123456789012345" | if user signs in with Google
   userId: text("user_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
-  accessToken: text("access_token"),
-  refreshToken: text("refresh_token"),
+  accessToken: text("access_token"), // The access token of the account. Returned by the provider
+  refreshToken: text("refresh_token"), // The refresh token of the account. Returned by the provider
   idToken: text("id_token"),
   accessTokenExpiresAt: timestamp("access_token_expires_at"),
   refreshTokenExpiresAt: timestamp("refresh_token_expires_at"),
-  scope: text("scope"),
+  scope: text("scope"), // scope of permissions(Allowing), whit Email&Pass auth.. put scope as null
   password: text("password"),
   ...timestamps,
 });
@@ -77,8 +84,8 @@ export const account = pgTable("account", {
 ====================== */
 export const verification = pgTable("verification", {
   id: text("id").primaryKey(),
-  identifier: text("identifier").notNull(),
-  value: text("value").notNull(),
+  identifier: text("identifier").notNull(), //"email", "resetPassword", or "oauth-state"
+  value: text("value").notNull(), // The one-time link token sent via email, or a user's ID
   expiresAt: timestamp("expires_at").notNull(),
   ...timestamps,
 });

@@ -440,7 +440,7 @@ students {
   userId: string (FK -> user.id)
   nationalId: string (unique)
   fullName: string
-  city: string
+  city: enum(EgyptianCity)
   gpa: numeric(3,2)
   major: enum("CS" | "IT" | "IS" | "AI" | "DS")
   bioText: text
@@ -468,8 +468,8 @@ internships {
   companyId: integer (FK -> companies.id)
   title: string
   description: text
-  requiredMajor: enum
-  city: string
+  requiredMajor: enum("CS" | "IT" | "IS" | "AI" | "DS")
+  city: enum(EgyptianCity)
   minGpa: numeric(3,2)
   capacity: integer
   status: enum("active" | "inactive")
@@ -491,6 +491,26 @@ applications {
   UNIQUE(studentId, internshipId)
   UNIQUE(studentId, wishOrder)
 }
+```
+
+### Enums
+
+#### Major
+
+```
+"CS" | "IT" | "IS" | "AI" | "DS"
+```
+
+#### Egyptian Cities (`EgyptianCity`)
+
+Both `students.city` and `internships.city` are restricted to one of the 27 Egyptian governorate capitals:
+
+```
+Cairo, Alexandria, Giza, Shubra El Kheima, Port Said, Suez, Luxor,
+Mansoura, El Mahalla El Kubra, Tanta, Asyut, Ismailia, Fayyum,
+Zagazig, Aswan, Damietta, Damanhur, Minya, Beni Suef, Qena,
+Sohag, Hurghada, 6th of October City, Shibin El Kom, Banha,
+Arish, Mallawi
 ```
 
 ## 🧮 Selection Algorithm

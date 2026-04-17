@@ -1,9 +1,11 @@
+import { EgyptianCity, egyptianCityValues } from "../../../db/schema";
+
 export interface RegisterStudentDTO {
   email: string;
   password: string;
   nationalId: string;
   fullName: string;
-  city: string;
+  city: EgyptianCity;
   gpa: number;
   major: "CS" | "IT" | "IS" | "AI" | "DS";
   bioText: string;
@@ -29,7 +31,14 @@ export function validateStudentRegistration(data: RegisterStudentDTO): {
     errors.push({ field: "fullName", message: "Full name is required" });
   if (!data.nationalId)
     errors.push({ field: "nationalId", message: "National ID is required" });
-  if (!data.city) errors.push({ field: "city", message: "City is required" });
+  if (!data.city) {
+    errors.push({ field: "city", message: "City is required" });
+  } else if (!(egyptianCityValues as readonly string[]).includes(data.city)) {
+    errors.push({
+      field: "city",
+      message: `City must be one of the valid Egyptian cities: ${egyptianCityValues.join(", ")}`,
+    });
+  }
   if (data.gpa === undefined || data.gpa === null) {
     errors.push({ field: "gpa", message: "GPA is required" });
   }

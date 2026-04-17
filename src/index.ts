@@ -7,7 +7,7 @@ import internshipCompanyRoutes from "./modules/internships/company/routes";
 import internshipStudentRoutes from "./modules/internships/student/routes";
 import studentRoute from "./modules/student/routes";
 import companyRoute from "./modules/company/routes";
-import authRouter from "./routes/auth";
+// import authRouter from "./routes/auth";
 import { toNodeHandler } from "better-auth/node";
 import { auth } from "./lib/auth";
 
@@ -25,7 +25,7 @@ app.use(
 );
 
 app.use(express.json());
-app.use("/api/auth", authRouter);
+// app.use("/api/auth", authRouter);
 
 // Internship routes
 app.use("/api/internships", internshipsRouter);

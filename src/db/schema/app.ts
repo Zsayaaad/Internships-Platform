@@ -28,6 +28,38 @@ export const internshipStatusEnum = pgEnum("internship_status", [
   "inactive",
 ]);
 
+export const egyptianCityValues = [
+  "Cairo",
+  "Alexandria",
+  "Giza",
+  "Shubra El Kheima",
+  "Port Said",
+  "Suez",
+  "Luxor",
+  "Mansoura",
+  "El Mahalla El Kubra",
+  "Tanta",
+  "Asyut",
+  "Ismailia",
+  "Fayyum",
+  "Zagazig",
+  "Aswan",
+  "Damietta",
+  "Damanhur",
+  "Minya",
+  "Beni Suef",
+  "Qena",
+  "Sohag",
+  "Hurghada",
+  "6th of October City",
+  "Shibin El Kom",
+  "Banha",
+  "Arish",
+  "Mallawi",
+] as const;
+export type EgyptianCity = (typeof egyptianCityValues)[number];
+export const egyptianCityEnum = pgEnum("egyptian_city", egyptianCityValues);
+
 export const applicationStatusValues = [
   "pending",
   "accepted",
@@ -53,7 +85,7 @@ export const students = pgTable(
       .references(() => user.id, { onDelete: "cascade" }),
     nationalId: varchar("national_id", { length: 50 }).notNull(),
     fullName: varchar("full_name", { length: 200 }).notNull(),
-    city: varchar("city", { length: 100 }).notNull(),
+    city: egyptianCityEnum("city").notNull(),
     gpa: numeric("gpa", { precision: 3, scale: 2 }).notNull(),
     major: majorEnum("major").notNull(),
     bioText: text("bio_text").notNull(),
@@ -96,7 +128,7 @@ export const internships = pgTable("internships", {
   title: varchar("title", { length: 200 }).notNull(),
   description: text("description"),
   requiredMajor: majorEnum("required_major").notNull(),
-  city: varchar("city", { length: 100 }).notNull(),
+  city: egyptianCityEnum("city").notNull(),
   minGpa: numeric("min_gpa", { precision: 3, scale: 2 }).notNull(),
   capacity: integer("capacity").notNull(),
   status: internshipStatusEnum("status").default("active").notNull(),
